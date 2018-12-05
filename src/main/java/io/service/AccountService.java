@@ -2,7 +2,6 @@ package io.service;
 
 import io.entity.Account;
 import io.utilites.ReadAccountFromFile;
-import io.utilites.ThreadTransfer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +12,8 @@ import java.util.concurrent.Executors;
 public class AccountService {
 
     private static final String PATH_TO_READ_FILE = ".\\src\\main\\resources";
-
+    private static final int COUNT_THREAD = 10;
+    private static final int MAX_TRANSACTION = 1000;
     private Logger logger = LoggerFactory.getLogger(AccountService.class);
     private List<Account> accountList;
     private ReadAccountFromFile readAccFromFile = new ReadAccountFromFile();
@@ -38,14 +38,14 @@ public class AccountService {
         logger.info("Общая сумма = {} рубля(ей). " ,countSumBalance());
     }
 
-    public void startExchange(int countThread, int maxTransfer) throws InterruptedException {
-        ExecutorService executorService = Executors.newFixedThreadPool(countThread);
-        for (int i = 0; i < countThread; i++) {
-            executorService.execute(new ThreadTransfer(accountList, maxTransfer, transferService));
+    public void startExchange() throws InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(COUNT_THREAD);
+        for (int i = 0; i < COUNT_THREAD; i++) {
+            executorService.execute(new ThreadTransfer(accountList, MAX_TRANSACTION, transferService));
         }
         executorService.shutdown();
-        while (!executorService.isTerminated()) {
-            Thread.sleep(2000);
+        while (!executorService.isTerminated()) { // вызывает true если все задачи завершены
+            Thread.sleep(1);
         }
     }
 }

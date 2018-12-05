@@ -1,4 +1,4 @@
-package io.utilites;
+package io.service;
 
 import io.entity.Account;
 import io.service.TransferService;
@@ -8,6 +8,7 @@ import java.util.Random;
 
 public class ThreadTransfer implements Runnable {
 
+    private static final int RANDOM_MONEY = 100;
     private Random random = new Random();
     private TransferService transferService;
     private List<Account> accounts;
@@ -25,7 +26,7 @@ public class ThreadTransfer implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             Account accountOneRand = accounts.get(random.nextInt(accounts.size()));
             Account accountTwoRand = accounts.get(random.nextInt(accounts.size()));
-            randMoneyCount = random.nextInt(100);
+            randMoneyCount = random.nextInt(RANDOM_MONEY);
             try {
                 transferService.transferStart(accountOneRand, accountTwoRand, randMoneyCount, maxTransfer);
             } catch (InterruptedException e) {

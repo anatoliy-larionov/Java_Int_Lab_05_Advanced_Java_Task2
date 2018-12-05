@@ -11,6 +11,8 @@ public class WriteAccountInFile {
 
     private Logger logger = LoggerFactory.getLogger(WriteAccountInFile.class);
     private Random random = new Random();
+    private static final int COUNT_ACCOUNTS = 20;
+    private static final int RANDOM_BALANCE = 9999;
 
     public void writeAccountInFile(String path, Account account) throws IOException {
         File file = new File(path);
@@ -22,9 +24,9 @@ public class WriteAccountInFile {
     }
 
     public void getRandomAccount() throws IOException {
-        for (int i = 1; i < 20; i++) {
+        for (int i = 1; i < COUNT_ACCOUNTS; i++) {
             writeAccountInFile(".\\src\\main\\resources\\" + i + " .account",
-                    new Account(i,"аккаунта: " + i, random.nextInt(9000)));
+                    new Account(i,"аккаунта: " + i, random.nextInt(RANDOM_BALANCE)));
         }
     }
 }
