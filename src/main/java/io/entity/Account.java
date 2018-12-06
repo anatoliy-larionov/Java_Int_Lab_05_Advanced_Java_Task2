@@ -5,7 +5,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Account implements Serializable {
-
     private int id;
     private String nameAccount;
     private long balance;
@@ -45,7 +44,7 @@ public class Account implements Serializable {
     @Override
     public String toString() {
         return "Аккаунт[" + "id = " + getId() +
-                            ", имя = '" + nameAccount + '\'' +
-                            ", баланс = " + getBalance() + ']';
+                ", имя = '" + nameAccount + '\'' +
+                ", баланс = " + getBalance() + ']';
     }
 }

@@ -8,9 +8,9 @@ public class DemoService {
 
     public static void start() throws IOException, InterruptedException {
         WriteAccountInFile writeAccountInFile = new WriteAccountInFile();
-        writeAccountInFile.getRandomAccount();
-
         AccountService accountService = new AccountService();
+
+        writeAccountInFile.getRandomAccount();
         accountService.readAccount();
         accountService.printSumAndBalance(); // начальный баланс
         accountService.startExchange();

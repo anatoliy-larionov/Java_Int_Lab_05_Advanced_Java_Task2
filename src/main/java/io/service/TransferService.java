@@ -13,48 +13,47 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class TransferService {
-
     private Logger logger = LoggerFactory.getLogger(TransferService.class);
     private Lock lock = new ReentrantLock();
     private volatile AtomicInteger numOfTransaction = new AtomicInteger();
-    private static final long ONE_SECONDS = 1L;
+    /* private static final long ONE_SECONDS = 1L;*/
 
     public void transferStart(Account accountOne, Account accountTwo, long countMoney, int maxTransaction) throws InterruptedException {
         Thread.sleep(200);
         if (numOfTransaction.get() < maxTransaction) {
-            /*lock.lock();*/
-            if (accountOne.getLock().tryLock(ONE_SECONDS, TimeUnit.SECONDS)) {
-                if (accountTwo.getLock().tryLock(ONE_SECONDS, TimeUnit.SECONDS)) {
-                    try {
-                        if (accountOne.getBalance() < countMoney) {
-                            throw new BalanceNotMatchForTransfer("Баланс не соответствует для перевода!");
-                        }
-                        if (accountOne.equals(accountTwo)) {
-                            throw new ErrorTransferIsMadeToTheAccount("Ошибка перевод совершен на один и тот же аккаунт!");
-                        }
-                        long tempOne = accountOne.getBalance() - countMoney;
-                        long tempTwo = accountTwo.getBalance() + countMoney;
-                        if (tempOne < 0 || tempTwo < 0) {
-                            throw new NegativeException("Отрицательный баланс!!!");
-                        } else {
-                            accountOne.setBalance(tempOne);
-                            accountTwo.setBalance(tempTwo);
-                            numOfTransaction.incrementAndGet();
-                            logger.info("Сумма в размере {} рубля(ей) переведена со счета {} (текущий баланс = {}) -> " +
-                                            "на счет {} (текущий баланс = {}). Номер транзакции {} Успешно",
-                                    countMoney, accountOne.getNameAccount(), accountOne.getBalance(), accountTwo.getNameAccount(),
-                                    accountTwo.getBalance(), numOfTransaction);
-                        }
-                    } catch (Exception e) {
-                        logger.error(e.getMessage());
-                    } finally {
-                        accountOne.getLock().unlock();
-                        accountTwo.getLock().unlock();
-                        /*lock.unlock();*/
-                    }
+            lock.lock();
+           /* if (accountOne.getLock().tryLock(ONE_SECONDS, TimeUnit.SECONDS)) {
+                if (accountTwo.getLock().tryLock(ONE_SECONDS, TimeUnit.SECONDS)) {*/
+            try {
+                if (accountOne.getBalance() < countMoney) {
+                    throw new BalanceNotMatchForTransfer("Баланс не соответствует для перевода!");
                 }
+                if (accountOne.equals(accountTwo)) {
+                    throw new ErrorTransferIsMadeToTheAccount("Ошибка перевод совершен на один и тот же аккаунт!");
+                }
+                long tempOne = accountOne.getBalance() - countMoney;
+                long tempTwo = accountTwo.getBalance() + countMoney;
+                if (tempOne < 0 || tempTwo < 0) {
+                    throw new NegativeException("Отрицательный баланс!!!");
+                } else {
+                    accountOne.setBalance(tempOne);
+                    accountTwo.setBalance(tempTwo);
+                    numOfTransaction.incrementAndGet();
+                    logger.info("Сумма в размере {} рубля(ей) переведена со счета {} (текущий баланс = {}) -> " +
+                                    "на счет {} (текущий баланс = {}). Номер транзакции {} Успешно",
+                            countMoney, accountOne.getNameAccount(), accountOne.getBalance(), accountTwo.getNameAccount(),
+                            accountTwo.getBalance(), numOfTransaction);
+                }
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            } finally {
+                       /* accountOne.getLock().unlock();
+                        accountTwo.getLock().unlock();*/
+                lock.unlock();
             }
-        }else {
+              /*  }
+            }*/
+        } else {
             Thread.currentThread().interrupt();
         }
     }

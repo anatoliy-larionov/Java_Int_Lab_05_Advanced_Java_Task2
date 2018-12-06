@@ -13,15 +13,14 @@ import java.util.List;
 import java.util.Objects;
 
 public class ReadAccountFromFile {
-
-    private List<Account> accountList = new ArrayList<>();
     private Logger logger = LoggerFactory.getLogger(ReadAccountFromFile.class);
 
-    public List readAccFromFile(String path) throws ClassNotFoundException {
+    public List<Account> readAccFromFile(String path) throws ClassNotFoundException {
         File file = new File(path);
-        for(File files : Objects.requireNonNull(file.listFiles())){
+        List<Account> accountList = new ArrayList<>();
+        for (File files : Objects.requireNonNull(file.listFiles())) {
             try (ObjectInputStream objectOS = new ObjectInputStream(new FileInputStream(files))) {
-                accountList.add((Account)objectOS.readObject());
+                accountList.add((Account) objectOS.readObject());
             } catch (IOException e) {
                 logger.info("Файл не существует!");
             }

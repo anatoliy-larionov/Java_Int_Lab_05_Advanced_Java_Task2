@@ -1,7 +1,6 @@
 package io.service;
 
 import io.entity.Account;
-import io.service.TransferService;
 
 import java.util.List;
 import java.util.Random;
@@ -12,11 +11,11 @@ public class ThreadTransfer implements Runnable {
     private Random random = new Random();
     private TransferService transferService;
     private List<Account> accounts;
-    private int maxTransfer;
+    private int maxTransaction;
 
-    public ThreadTransfer(List<Account> accounts, int maxTransfer, TransferService transferService) {
+    public ThreadTransfer(List<Account> accounts, int maxTransaction, TransferService transferService) {
         this.accounts = accounts;
-        this.maxTransfer = maxTransfer;
+        this.maxTransaction = maxTransaction;
         this.transferService = transferService;
     }
 
@@ -28,7 +27,7 @@ public class ThreadTransfer implements Runnable {
             Account accountTwoRand = accounts.get(random.nextInt(accounts.size()));
             randMoneyCount = random.nextInt(RANDOM_MONEY);
             try {
-                transferService.transferStart(accountOneRand, accountTwoRand, randMoneyCount, maxTransfer);
+                transferService.transferStart(accountOneRand, accountTwoRand, randMoneyCount, maxTransaction);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

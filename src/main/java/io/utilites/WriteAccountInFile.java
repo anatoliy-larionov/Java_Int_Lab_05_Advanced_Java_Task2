@@ -8,7 +8,6 @@ import java.io.*;
 import java.util.Random;
 
 public class WriteAccountInFile {
-
     private Logger logger = LoggerFactory.getLogger(WriteAccountInFile.class);
     private Random random = new Random();
     private static final int COUNT_ACCOUNTS = 20;
@@ -26,7 +25,7 @@ public class WriteAccountInFile {
     public void getRandomAccount() throws IOException {
         for (int i = 1; i < COUNT_ACCOUNTS; i++) {
             writeAccountInFile(".\\src\\main\\resources\\" + i + " .account",
-                    new Account(i,"аккаунта: " + i, random.nextInt(RANDOM_BALANCE)));
+                    new Account(i, "аккаунта: " + i, random.nextInt(RANDOM_BALANCE)));
         }
     }
 }
